@@ -22,29 +22,6 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Debug - List all files
-        run: |
-          echo "当前目录: $(pwd)"
-          echo "列出所有文件:"
-          ls -la
-          echo ""
-          echo "检查 gradlew 文件是否存在:"
-          if [ -f "gradlew" ]; then
-            echo "✅ gradlew 文件存在"
-            ls -la gradlew
-          else
-            echo "❌ gradlew 文件不存在"
-          fi
-          echo ""
-          echo "查找整个仓库中的 gradlew:"
-          find . -name "gradlew" -type f
-          echo ""
-          echo "查找整个仓库中的 gradle-wrapper.jar:"
-          find . -name "gradle-wrapper.jar" -type f
-          echo ""
-          echo "目录结构:"
-          find . -type d | head -20
-
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
 
