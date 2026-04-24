@@ -1,0 +1,13 @@
+{
+  "itemGroup.moonlightbay": "Example Mod Tab",
+  "block.moonlightbay.example_block": "Example Block",
+  "item.moonlightbay.example_item": "Example Item",
+
+  "moonlightbay.configuration.title": "Moonlight Bay Configs",
+  "moonlightbay.configuration.section.moonlightbay.common.toml": "Moonlight Bay Configs",
+  "moonlightbay.configuration.section.moonlightbay.common.toml.title": "Moonlight Bay Configs",
+  "moonlightbay.configuration.items": "Item List",
+  "moonlightbay.configuration.logDirtBlock": "Log Dirt Block",
+  "moonlightbay.configuration.magicNumberIntroduction": "Magic Number Text",
+  "moonlightbay.configuration.magicNumber": "Magic Number"
+}
