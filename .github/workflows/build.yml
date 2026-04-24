@@ -25,7 +25,7 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          ./gradlew build -Ploader=${{ matrix.loader }} --no-daemon
+          bash ./gradlew build -Ploader=${{ matrix.loader }} --no-daemon
 
       - name: Upload JAR artifacts
         uses: actions/upload-artifact@v4
