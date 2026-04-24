@@ -28,6 +28,11 @@ jobs:
       - name: Build with Gradle
         run: |
           chmod +x gradlew
+          # 删除可能损坏的 wrapper jar
+          rm -f gradle/wrapper/gradle-wrapper.jar
+          # 重新生成正确的 wrapper 文件
+          ./gradlew wrapper --gradle-version 8.5
+          # 正式构建
           ./gradlew build -Ploader=${{ matrix.loader }} --no-daemon
 
       - name: Upload JAR artifacts
