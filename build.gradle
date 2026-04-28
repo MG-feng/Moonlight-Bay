@@ -83,17 +83,19 @@ dependencies {
     // NeoForge 核心依赖
     implementation "net.neoforged:neoforge:${neo_version}"
     
-    // Fabric API - 用于读取 Fabric 模组（编译时需要）
+    // ========== 编译时依赖（用于读取其他平台的模组，运行时不需要） ==========
+    
+    // Fabric API - 用于读取 Fabric 模组
     def fabricLoaderVer = project.hasProperty('fabric_loader_version') ? project.fabric_loader_version : '0.16.9'
     def fabricApiVer = project.hasProperty('fabric_api_version') ? project.fabric_api_version : '0.102.0+1.21.1'
     compileOnly "net.fabricmc:fabric-loader:${fabricLoaderVer}"
     compileOnly "net.fabricmc.fabric-api:fabric-api:${fabricApiVer}"
     
-    // Forge - 用于读取 Forge 模组（编译时需要）
+    // Forge - 用于读取 Forge 模组
     def forgeVer = project.hasProperty('forge_version') ? project.forge_version : '49.1.0'
     compileOnly "net.minecraftforge:forge:${forgeVer}"
     
-    // Mixin 支持
+    // Mixin 支持（用于跨平台兼容）
     compileOnly "org.spongepowered:mixin:0.8.5"
 }
 
