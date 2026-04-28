@@ -24,6 +24,18 @@ sourceSets.main.resources {
 
 repositories {
     mavenCentral()
+    maven {
+        name = "NeoForge"
+        url = "https://maven.neoforged.net/releases/"
+    }
+    maven {
+        name = "Fabric"
+        url = "https://maven.fabricmc.net/"
+    }
+    maven {
+        name = "Forge"
+        url = "https://maven.minecraftforge.net/"
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
@@ -68,9 +80,22 @@ neoForge {
 }
 
 dependencies {
+    // NeoForge 核心依赖
     implementation "net.neoforged:neoforge:${neo_version}"
+    
+    // ========== 编译时需要但运行时可选的依赖 ==========
+    // Fabric API - 用于读取 Fabric 模组
+    compileOnly "net.fabricmc:fabric-loader:0.16.9"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:0.102.0+1.21.1"
+    
+    // Forge - 用于读取 Forge 模组
+    compileOnly "net.minecraftforge:forge:${forge_version}"
+    
+    // Mixin 支持
+    compileOnly "org.spongepowered:mixin:0.8.5"
 }
 
+// 处理资源重复问题
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
