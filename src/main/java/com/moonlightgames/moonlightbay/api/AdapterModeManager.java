@@ -1,4 +1,4 @@
-package main.java.com.moonlightgames.moonlightbay.api;
+package com.moonlightgames.moonlightbay.api;
 
 import com.moonlightgames.moonlightbay.gui.CompatibilityQuestionScreen;
 import com.moonlightgames.moonlightbay.server.ServerQuestionHandler;
