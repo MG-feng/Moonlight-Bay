@@ -25,10 +25,19 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
+      - name: Setup Gradle Wrapper
+        run: |
+          # 删除可能损坏的 wrapper（如果存在）
+          rm -f gradle/wrapper/gradle-wrapper.jar
+          # 重新生成 gradle wrapper
+          gradle wrapper --gradle-version 8.5
+          # 或者手动下载（备选方案）
+          # wget https://raw.githubusercontent.com/gradle/gradle/v8.5.0/gradle/wrapper/gradle-wrapper.jar -O gradle/wrapper/gradle-wrapper.jar
+
       - name: Build with Gradle
         run: |
           chmod +x gradlew
-          bash ./gradlew build -Ploader=${{ matrix.loader }} --no-daemon
+          ./gradlew build -Ploader=${{ matrix.loader }} --no-daemon --stacktrace
 
       - name: Upload JAR artifacts
         uses: actions/upload-artifact@v4
