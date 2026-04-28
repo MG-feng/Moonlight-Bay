@@ -2,13 +2,7 @@ plugins {
     id 'java-library'
     id 'maven-publish'
     id 'idea'
-}
-
-// 根据 loader 应用不同的插件
-if (project.properties['loader'] == 'neoforge') {
-    apply plugin: 'net.neoforged.moddev'
-} else if (project.properties['loader'] == 'forge') {
-    apply plugin: 'net.minecraftforge.gradle'
+    id 'net.neoforged.moddev' version '2.0.141'
 }
 
 tasks.named('wrapper', Wrapper).configure {
@@ -30,147 +24,76 @@ sourceSets.main.resources {
 
 repositories {
     mavenCentral()
-    maven {
-        name = "NeoForge"
-        url = "https://maven.neoforged.net/releases/"
-    }
-    maven {
-        name = "Forge"
-        url = "https://maven.minecraftforge.net/"
-    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
-// ========== NeoForge 配置 ==========
-if (project.properties['loader'] == 'neoforge') {
-    neoForge {
-        version = project.neo_version
-        
-        parchment {
-            mappingsVersion = project.parchment_mappings_version
-            minecraftVersion = project.parchment_minecraft_version
+neoForge {
+    version = project.neo_version
+    
+    parchment {
+        mappingsVersion = project.parchment_mappings_version
+        minecraftVersion = project.parchment_minecraft_version
+    }
+    
+    runs {
+        client {
+            client()
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
-        
-        runs {
-            client {
-                client()
-                systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            }
-            server {
-                server()
-                programArgument '--nogui'
-                systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            }
-            gameTestServer {
-                type = "gameTestServer"
-                systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-            }
-            data {
-                data()
-                programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
-            }
-            configureEach {
-                systemProperty 'forge.logging.markers', 'REGISTRIES'
-                logLevel = org.slf4j.event.Level.DEBUG
-            }
+        server {
+            server()
+            programArgument '--nogui'
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
-        
-        mods {
-            "${mod_id}" {
-                sourceSet(sourceSets.main)
-            }
+        gameTestServer {
+            type = "gameTestServer"
+            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
+        }
+        data {
+            data()
+            programArguments.addAll '--mod', project.mod_id, '--all', '--output', file('src/generated/resources/').getAbsolutePath(), '--existing', file('src/main/resources/').getAbsolutePath()
+        }
+        configureEach {
+            systemProperty 'forge.logging.markers', 'REGISTRIES'
+            logLevel = org.slf4j.event.Level.DEBUG
         }
     }
-}
-
-// ========== Forge 配置 ==========
-if (project.properties['loader'] == 'forge') {
-    minecraft {
-        mappings channel: 'official', version: project.minecraft_version
-        
-        runs {
-            client {
-                workingDirectory project.file('run')
-                property 'forge.logging.markers', 'REGISTRIES'
-                property 'forge.logging.console.level', 'debug'
-                mods {
-                    "${mod_id}" {
-                        source sourceSets.main
-                    }
-                }
-            }
-            
-            server {
-                workingDirectory project.file('run')
-                property 'forge.logging.markers', 'REGISTRIES'
-                property 'forge.logging.console.level', 'debug'
-                mods {
-                    "${mod_id}" {
-                        source sourceSets.main
-                    }
-                }
-            }
-            
-            data {
-                workingDirectory project.file('run')
-                property 'forge.logging.markers', 'REGISTRIES'
-                property 'forge.logging.console.level', 'debug'
-                args '--mod', mod_id, '--all', '--output', file('src/generated/resources/'), '--existing', file('src/main/resources/')
-                mods {
-                    "${mod_id}" {
-                        source sourceSets.main
-                    }
-                }
-            }
+    
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
         }
     }
 }
 
 dependencies {
-    if (project.properties['loader'] == 'neoforge') {
-        implementation "net.neoforged:neoforge:${neo_version}"
-    }
-    
-    if (project.properties['loader'] == 'forge') {
-        implementation "net.minecraftforge:forge:${project.forge_version}"
-    }
+    implementation "net.neoforged:neoforge:${neo_version}"
 }
 
-// 处理资源重复问题
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    
-    if (project.properties['loader'] == 'neoforge') {
-        exclude 'META-INF/mods.toml'
-    }
-    
-    if (project.properties['loader'] == 'forge') {
-        exclude 'META-INF/neoforge.mods.toml'
-    }
 }
 
-// NeoForge 元数据生成
-if (project.properties['loader'] == 'neoforge') {
-    var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-        var replaceProperties = [
-            minecraft_version      : project.minecraft_version,
-            minecraft_version_range: project.minecraft_version_range,
-            neo_version            : project.neo_version,
-            loader_version_range   : project.loader_version_range,
-            mod_id                 : project.mod_id,
-            mod_name               : project.mod_name,
-            mod_license            : project.mod_license,
-            mod_version            : project.mod_version,
-        ]
-        inputs.properties replaceProperties
-        expand replaceProperties
-        from "src/main/templates"
-        into "build/generated/sources/modMetadata"
-    }
-    sourceSets.main.resources.srcDir generateModMetadata
-    neoForge.ideSyncTask generateModMetadata
+var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
+    var replaceProperties = [
+        minecraft_version      : project.minecraft_version,
+        minecraft_version_range: project.minecraft_version_range,
+        neo_version            : project.neo_version,
+        loader_version_range   : project.loader_version_range,
+        mod_id                 : project.mod_id,
+        mod_name               : project.mod_name,
+        mod_license            : project.mod_license,
+        mod_version            : project.mod_version,
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from "src/main/templates"
+    into "build/generated/sources/modMetadata"
 }
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
 
 publishing {
     publications {
