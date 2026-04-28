@@ -76,14 +76,13 @@ dependencies {
     
     // ========== 编译时依赖（用于读取其他平台的模组） ==========
     
-    // Fabric API - 让编译器能找到 fabric.mod.json 和 ModInitializer 等
+    // Fabric API
     compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
     compileOnly "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     
-    // Forge - 让编译器能找到 @Mod 注解和 ForgeRegistries 等
+    // Forge
     compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
-
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
