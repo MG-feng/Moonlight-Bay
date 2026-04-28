@@ -22,43 +22,10 @@ jobs:
           java-version: '21'
           distribution: 'temurin'
 
-      - name: Remove incompatible platform code
+      - name: Fix package declarations
         run: |
-          # 删除整个 fabric 和 forge 平台目录
-          rm -rf src/main/java/com/moonlightgames/moonlightbay/platform/fabric
-          rm -rf src/main/java/com/moonlightgames/moonlightbay/platform/forge
-          
-          # 删除 MoonlightBayClient（如果有）
-          rm -f src/main/java/com/moonlightgames/moonlightbay/MoonlightBayClient.java
-          
-          # 修复 Api 类的包声明
-          find src/main/java -name "*.java" -type f -exec sed -i 's/package main\.java\.com\.moonlightgames\.moonlightbay\.api/package com.moonlightgames.moonlightbay.api/g' {} \;
+          # 修复错误的包声明（删除 main.java. 前缀）
           find src/main/java -name "*.java" -type f -exec sed -i 's/package main\.java\.com\.moonlightgames\.moonlightbay/package com.moonlightgames.moonlightbay/g' {} \;
-          
-          echo "清理完成"
-
-      - name: Create simplified main class if needed
-        run: |
-          # 检查主类是否存在且能编译，如果不能，用简化版替换
-          cat > src/main/java/com/moonlightgames/moonlightbay/MoonlightBay.java << 'EOF'
-package com.moonlightgames.moonlightbay;
-
-import net.neoforged.fml.common.Mod;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@Mod(MoonlightBay.MODID)
-public class MoonlightBay {
-    public static final String MODID = "moonlightbay";
-    public static final Logger LOGGER = LoggerFactory.getLogger(MODID);
-    
-    public MoonlightBay() {
-        LOGGER.info("Moonlight Bay 适配模组加载成功！");
-        LOGGER.info("当前平台: NeoForge for Minecraft 1.21.1");
-        LOGGER.info("本模组让 NeoForge 玩家可以运行其他平台的模组");
-    }
-}
-EOF
 
       - name: Setup Gradle
         uses: gradle/actions/setup-gradle@v3
