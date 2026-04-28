@@ -39,10 +39,8 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 neoForge {
     version = project.neo_version
     
-    parchment {
-        mappingsVersion = project.parchment_mappings_version
-        minecraftVersion = project.parchment_minecraft_version
-    }
+    // Parchment 配置已移除，因为该版本不存在
+    // 如果您需要 Parchment 映射，请访问 https://maven.parchmentmc.org 查找有效版本
     
     runs {
         client {
