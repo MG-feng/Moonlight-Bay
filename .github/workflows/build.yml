@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        loader: [neoforge, forge, fabric]
+        loader: [neoforge, forge]
 
     steps:
       - name: Checkout code
