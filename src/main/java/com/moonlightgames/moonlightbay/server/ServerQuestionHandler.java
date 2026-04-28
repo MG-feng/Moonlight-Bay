@@ -1,4 +1,4 @@
-package main.java.com.moonlightgames.moonlightbay.server;
+package com.moonlightgames.moonlightbay.server;
 
 import com.moonlightgames.moonlightbay.api.ConfigHelper;
 
