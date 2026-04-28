@@ -91,9 +91,9 @@ dependencies {
     compileOnly "net.fabricmc:fabric-loader:${fabricLoaderVer}"
     compileOnly "net.fabricmc.fabric-api:fabric-api:${fabricApiVer}"
     
-    // Forge - 用于读取 Forge 模组
+    // Forge - 用于读取 Forge 模组（需要包含 Minecraft 版本）
     def forgeVer = project.hasProperty('forge_version') ? project.forge_version : '49.1.0'
-    compileOnly "net.minecraftforge:forge:${forgeVer}"
+    compileOnly "net.minecraftforge:forge:${minecraft_version}-${forgeVer}"
     
     // Mixin 支持（用于跨平台兼容）
     compileOnly "org.spongepowered:mixin:0.8.5"
