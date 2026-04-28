@@ -76,13 +76,14 @@ dependencies {
     
     // ========== 编译时依赖（用于读取其他平台的模组） ==========
     
-    // Fabric API
+    // Fabric - 让编译器能找到 Fabric 相关类
     compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
     compileOnly "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
     
-    // Forge
+    // Forge - 让编译器能找到 Forge 相关类
     compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
+    
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
