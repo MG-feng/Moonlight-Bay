@@ -1,4 +1,4 @@
-package main.java.com.moonlightgames.moonlightbay.gui;
+package com.moonlightgames.moonlightbay.gui;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
