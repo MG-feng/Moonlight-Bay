@@ -32,15 +32,16 @@ repositories {
         name = "Fabric"
         url = "https://maven.fabricmc.net/"
     }
+    maven {
+        name = "Forge"
+        url = "https://maven.minecraftforge.net/"
+    }
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 neoForge {
     version = project.neo_version
-    
-    // Parchment 配置已移除，因为该版本不存在
-    // 如果您需要 Parchment 映射，请访问 https://maven.parchmentmc.org 查找有效版本
     
     runs {
         client {
@@ -50,10 +51,6 @@ neoForge {
         server {
             server()
             programArgument '--nogui'
-            systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        }
-        gameTestServer {
-            type = "gameTestServer"
             systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
         }
         data {
@@ -77,36 +74,19 @@ dependencies {
     // NeoForge 核心依赖
     implementation "net.neoforged:neoforge:${neo_version}"
     
-    // Fabric API - 用于读取 Fabric 模组（编译时需要，运行时不需要）
-    def fabricLoaderVer = project.hasProperty('fabric_loader_version') ? project.fabric_loader_version : '0.16.9'
-    def fabricApiVer = project.hasProperty('fabric_api_version') ? project.fabric_api_version : '0.102.0+1.21.1'
-    compileOnly "net.fabricmc:fabric-loader:${fabricLoaderVer}"
-    compileOnly "net.fabricmc.fabric-api:fabric-api:${fabricApiVer}"
+    // ========== 编译时依赖（用于读取其他平台的模组） ==========
+    
+    // Fabric API - 让编译器能找到 fabric.mod.json 和 ModInitializer 等
+    compileOnly "net.fabricmc:fabric-loader:${fabric_loader_version}"
+    compileOnly "net.fabricmc.fabric-api:fabric-api:${fabric_api_version}"
+    
+    // Forge - 让编译器能找到 @Mod 注解和 ForgeRegistries 等
+    compileOnly "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
 }
 
 processResources {
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
-
-var generateModMetadata = tasks.register("generateModMetadata", ProcessResources) {
-    var replaceProperties = [
-        minecraft_version      : project.minecraft_version,
-        minecraft_version_range: project.minecraft_version_range,
-        neo_version            : project.neo_version,
-        loader_version_range   : project.loader_version_range,
-        mod_id                 : project.mod_id,
-        mod_name               : project.mod_name,
-        mod_license            : project.mod_license,
-        mod_version            : project.mod_version,
-    ]
-    inputs.properties replaceProperties
-    expand replaceProperties
-    from "src/main/templates"
-    into "build/generated/sources/modMetadata"
-}
-
-sourceSets.main.resources.srcDir generateModMetadata
-neoForge.ideSyncTask generateModMetadata
 
 publishing {
     publications {
