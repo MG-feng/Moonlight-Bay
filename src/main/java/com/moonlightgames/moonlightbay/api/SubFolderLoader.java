@@ -1,4 +1,4 @@
-package main.java.com.moonlightgames.moonlightbay.api;
+package com.moonlightgames.moonlightbay.api;
 
 import java.io.IOException;
 import java.nio.file.*;
