@@ -1,3 +1,18 @@
+// 在最顶部添加 buildscript 配置
+buildscript {
+    repositories {
+        maven {
+            name = "Fabric"
+            url = "https://maven.fabricmc.net/"
+        }
+        mavenCentral()
+        gradlePluginPortal()
+    }
+    dependencies {
+        classpath "net.fabricmc:fabric-loom:1.7.4"
+    }
+}
+
 plugins {
     id 'java-library'
     id 'maven-publish'
@@ -10,6 +25,11 @@ if (project.properties['loader'] == 'neoforge') {
 } else if (project.properties['loader'] == 'forge') {
     apply plugin: 'net.minecraftforge.gradle'
     apply plugin: 'org.spongepowered.mixin'
+}
+
+// Fabric 插件已经在 buildscript 中配置，需要在这里应用
+if (project.properties['loader'] == 'fabric') {
+    apply plugin: 'fabric-loom'
 }
 
 tasks.named('wrapper', Wrapper).configure {
