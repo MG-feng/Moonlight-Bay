@@ -1,0 +1,42 @@
+name: Manual Build
+
+on:
+  push:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Download Mindustry core
+      run: |
+        mkdir -p libs
+        wget -O libs/mindustry.jar https://github.com/Anuken/Mindustry/releases/download/v158.1/Mindustry.jar
+    
+    - name: Compile
+      run: |
+        mkdir -p build/classes
+        find src/main/java -name "*.java" > sources.txt
+        javac -cp "libs/mindustry.jar" -d build/classes @sources.txt
+    
+    - name: Package JAR
+      run: |
+        cd build/classes
+        jar cvf ../../moonlight-bay.jar *
+        cd ../..
+    
+    - name: Upload
+      uses: actions/upload-artifact@v4
+      with:
+        name: MoonlightBay
+        path: moonlight-bay.jar
