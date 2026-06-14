@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+        maven { url 'https://www.jitpack.io' }
+    }
+    dependencies {
+        classpath "com.github.Anuken.Arc:arc-core:v158.1"
+        classpath "com.github.Anuken.Mindustry:core:v158.1"
+    }
+}
+
+plugins {
+    id 'java'
+}
+
+sourceCompatibility = 17
+targetCompatibility = 17
+
+ext {
+    mindustryVersion = 'v158.1'
+    arcVersion = 'v158.1'
+}
+
+repositories {
+    mavenCentral()
+    maven { url "https://raw.githubusercontent.com/Zelaux/MindustryRepo/master/repository" }
+    maven { url 'https://www.jitpack.io' }
+}
+
+dependencies {
+    compileOnly "com.github.Anuken.Arc:arc-core:$mindustryVersion"
+    compileOnly "com.github.Anuken.Mindustry:core:$mindustryVersion"
+}
+
+jar {
+    archiveFileName = "${project.name}.jar"
+    from(sourceSets.main.output)
+
+    from {
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+    }
+
+    manifest {
+        attributes 'Main-Class': 'moonlightbay.MoonlightBayMod'
+    }
+}
+
+task deploy(type: Jar, dependsOn: jar) {
+    archiveFileName = "${project.name}.jar"
+    from sourceSets.main.output
+}

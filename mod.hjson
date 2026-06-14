@@ -1,0 +1,11 @@
+
+{
+  name: "moonlight-bay"
+  displayName: "Moonlight Bay"
+  author: "MGFeng"
+  description: "一个Java API前置模组、优化模组、适配模组集成一体的Mindustry模组"
+  version: "0.0.1-alpha"
+  minGameVersion: "158"
+  java: true
+  main: "moonlightbay.MoonlightBayMod"
+}
